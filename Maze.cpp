@@ -38,18 +38,18 @@ bool Maze::traverse(int row, int col)
    bool done = false; //assume we are not done unless proven otherwise
 
    //test that the current grid location is a space (i.e. not a wall or already tried)
-   
+
    if (maze->getElement(row,col) == SPACE)
    {
       //now it has been tried so mark it as tried
-	  
+
 	  maze->setElement(row,col,TRIED);
 
       Sleep(75);  //slow down the maze traversal
       gui->update();
 
       //check to see if we have arrived at the bottom right corner of the maze
-	  
+
       int height = maze->getNumRows();
       int width = maze->getNumCols();
 
@@ -67,11 +67,20 @@ bool Maze::traverse(int row, int col)
          //IMPORTANT!!
          //don't use row++ or column++ use row + 1 or col + 1, etc.
          //IMPORTANT: make use of the boolean that is returned every time you call traverse
-		 
+
 		 done = traverse(row+1,col); //UP
-		 done = traverse(row,col+1); //RIGHT
-		 done = traverse(row-1,col); //DOWN
-		 done = traverse(row,col-1); //LEFT
+		 if (done != TRUE)
+         {
+             done = traverse(row,col+1); //RIGHT
+         }
+            if (done != TRUE)
+            {
+                done = traverse(row-1,col); //DOWN
+            }
+                if (done != TRUE)
+                {
+                    done = traverse(row,col-1); //LEFT
+                }
 
       }
 
@@ -120,7 +129,7 @@ void Maze::draw(Cairo::RefPtr<Cairo::Context> cr, int width, int height)
 
    Color black(0.0, 0.0, 0.0);
    Rect blackRect(&black, cell_width, cell_height);
- 
+
    for (int i = 1; i <= rows; i++)
    {
       for (int j = 1; j <= cols; j++)
